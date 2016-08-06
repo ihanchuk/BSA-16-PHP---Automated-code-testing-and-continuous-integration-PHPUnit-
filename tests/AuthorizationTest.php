@@ -20,7 +20,6 @@ class MainTest extends TestCase
 
     public function test_registartion_and_login_pages()
     {
-        /* Test if login/register pages are active */
         $this->call('GET', '/login');
         $this->assertResponseOk();
 
