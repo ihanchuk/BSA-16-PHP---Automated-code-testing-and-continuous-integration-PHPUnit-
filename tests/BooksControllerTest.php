@@ -55,6 +55,21 @@ class BooksControllerTest extends TestCase
         $this->assertSessionHas('dialog', 'New book is created');
     }
 
+    public function  testMethodStoreWithAdminCredentialsAndBadData(){
+        $this->assertTrue(Auth::attempt($this->credentials));
+
+        $response = $this->call('POST', '/books', array(
+            '_token' => csrf_token(),
+            'author' => '',
+            'year' => 'string',
+            'title' => null,
+            'genre' =>null
+        ));
+
+        $this->assertTrue($response->isRedirection("/books"));
+        $this->assertSessionHas('errors');
+    }
+
     
 
 }
