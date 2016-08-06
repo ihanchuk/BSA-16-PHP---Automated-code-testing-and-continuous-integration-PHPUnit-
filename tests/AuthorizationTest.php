@@ -11,14 +11,13 @@ class MainTest extends TestCase
      *
      * @return void
      */
-    public function test_main_page_accessible()
+    public function testMainPage()
     {
-        /* Test if site is accessible*/
         $this->call('GET', '/');
         $this->assertResponseOk();
     }
 
-    public function test_registartion_and_login_pages()
+    public function testRegistrationAndLogin()
     {
         $this->call('GET', '/login');
         $this->assertResponseOk();
@@ -27,14 +26,9 @@ class MainTest extends TestCase
         $this->assertResponseOk();
     }
 
-    public function test_unauthorized_access()
+    public function testUnauthorizedAccess()
     {
         $this->call('GET', '/books');
         $this->assertRedirectedTo('/login');
-    }
-
-    public function test_authorized_access(){
-        Auth::loginUsingId(1);
-        $this->visit('/books')->see('Create');
     }
 }
