@@ -124,6 +124,12 @@ class BooksControllerTest extends TestCase
         $this->assertSessionHas('errors');
     }
 
+    public function  testMethodDeleteWithAdminCredentials(){
+        $this->assertTrue(Auth::attempt($this->credentials));
 
+        $response = $this->call('DELETE', '/books/2');
 
+        $this->assertTrue($response->isRedirection("/books"));
+        $this->assertSessionHas("dialog","Book deleted");
+    }
 }
