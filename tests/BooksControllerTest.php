@@ -70,6 +70,28 @@ class BooksControllerTest extends TestCase
         $this->assertSessionHas('errors');
     }
 
-    
+    public function testMethodShowWithAuthorizedUser(){
+        $this->assertTrue(Auth::attempt($this->credentials));
+        $response = $this->call('GET', '/books/1');
+        $this->assertFalse($response->isRedirection());
+        $this->assertViewHas("book");
+    }
+
+    public function testMethodShowWithUnAuthorizedUser(){
+        $response = $this->call('GET', '/books/1');
+        $this->assertTrue($response->isRedirection());
+    }
+
+    public function testMethodEditWithUnAuthorizedUser(){
+        $response = $this->call('GET', '/books/1/edit');
+        $this->assertTrue($response->isRedirection());
+    }
+
+    public function testMethodEditWithAuthorizedUser(){
+        $this->assertTrue(Auth::attempt($this->credentials));
+        $response = $this->call('GET', '/books/1/edit');
+        $this->assertFalse($response->isRedirection());
+        $this->see("Update book");
+    }
 
 }
