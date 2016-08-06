@@ -94,4 +94,36 @@ class BooksControllerTest extends TestCase
         $this->see("Update book");
     }
 
+    public function  testMethodUpdateWithAdminCredentialsAndValidData(){
+        $this->assertTrue(Auth::attempt($this->credentials));
+
+        $response = $this->call('PUT', '/books/1', array(
+            '_token' => csrf_token(),
+            'author' => 'Valid Author',
+            'year' => 2000,
+            'title' => 'Valid title',
+            'genre' =>'Comedy'
+        ));
+
+        $this->assertTrue($response->isRedirection("/books"));
+        $this->assertSessionHas('dialog', 'Book saved');
+    }
+
+    public function  testMethodUpdateWithAdminCredentialsAndBadData(){
+        $this->assertTrue(Auth::attempt($this->credentials));
+
+        $response = $this->call('PUT', '/books/1', array(
+            '_token' => csrf_token(),
+            'author' => '',
+            'year' => 'string',
+            'title' => null,
+            'genre' =>null
+        ));
+
+        $this->assertTrue($response->isRedirection("/books"));
+        $this->assertSessionHas('errors');
+    }
+
+
+
 }
